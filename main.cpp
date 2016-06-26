@@ -1,11 +1,32 @@
-#include "mainwindow.h"
 #include <QApplication>
+#include <time.h>
+#include <QFileDialog>
+#include <QDesktopServices>
+#include <QDirIterator>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    srand (time(NULL));
+    QFileDialog parentFolderPicker;
+       parentFolderPicker.setFileMode(QFileDialog::Directory);
+       parentFolderPicker.setOptions(QFileDialog::ShowDirsOnly);
 
-    return a.exec();
+       if (parentFolderPicker.exec())
+       {
+           if (!parentFolderPicker.selectedFiles().isEmpty())
+           {
+               QStringList folderSubDirectories;
+               QDirIterator subDirectoriesIterator(parentFolderPicker.selectedFiles().at(0), QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator ::NoIteratorFlags);
+
+               while(subDirectoriesIterator.hasNext()){
+                   subDirectoriesIterator.next();
+                   folderSubDirectories << subDirectoriesIterator.filePath();
+               }
+               QString openFolderURL = folderSubDirectories.at(rand() % folderSubDirectories.count() + 1);
+               QDesktopServices::openUrl(openFolderURL);
+           }
+       }
+
+       return 0;
 }

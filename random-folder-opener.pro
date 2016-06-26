@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-06-26T11:57:02
+# Project created by QtCreator 2016-06-26T12:25:55
 #
 #-------------------------------------------------
 
@@ -12,9 +12,8 @@ TARGET = random-folder-opener
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += main.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  +=
 
-FORMS    += mainwindow.ui
+FORMS    +=
