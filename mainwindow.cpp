@@ -8,9 +8,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QSettings save(QApplication::applicationDirPath().append("/").append("history.ina"), InaFormat);
-    save.beginGroup("General");
-    FolderHistoryList = save.value("DirectoryHistory").value<QList<QString>>();
-    save.endGroup();
+
+    int size = save.beginReadArray("DirectoryHistory");
+    for (int i = 0; i < size; ++i) {
+        save.setArrayIndex(i);
+        FolderHistoryList.append(save.value("HistoryFolder").toString());
+    }
 
     foreach (QString folder, FolderHistoryList)
     {
@@ -18,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
         itm->setText(folder);
         ui->listWidget_Favourites->insertItem(0, itm);
     }
+
 }
 
 MainWindow::~MainWindow()
@@ -45,34 +49,71 @@ void MainWindow::on_pushButton_Browse_clicked()
                QString openFolderURL = folderSubDirectories.at(rand()%((folderSubDirectories.count()-1) + 1));
                QDesktopServices::openUrl(openFolderURL);
 
-               if(!FolderHistoryList.contains(openFolderURL))
-                    FolderHistoryList.append(openFolderURL);
+//               if(!FolderHistoryList.contains(openFolderURL))
+//                    FolderHistoryList.append(openFolderURL);
+                  if(!FolderHistoryList.contains(parentFolderPicker.selectedFiles().at(0)))
+                       FolderHistoryList.append(parentFolderPicker.selectedFiles().at(0));
 
-               QSettings save(QApplication::applicationDirPath().append("/").append("history.ina"), QSettings::IniFormat);
 
-               save.beginGroup("General");
-               save.setValue("DirectoryHistory", QVariant::fromValue(FolderHistoryList));
-               save.endGroup();
+               QSettings save(QApplication::applicationDirPath().append("/").append("history.ina"), InaFormat);
 
-               exit(0);
+               save.beginWriteArray("DirectoryHistory");
+               for (int i = 0; i < FolderHistoryList.size(); ++i) {
+                   save.setArrayIndex(i);
+                   save.setValue("HistoryFolder", FolderHistoryList.at(i));
+               }
+               save.endArray();
+               save.sync();
+
+               ui->listWidget_Favourites->clear();
+
+               foreach (QString folder, FolderHistoryList)
+               {
+                   QListWidgetItem *itm = new QListWidgetItem();
+                   itm->setText(folder);
+                   ui->listWidget_Favourites->insertItem(0, itm);
+               }
+
            }
        }
 }
 
 void MainWindow::on_pushButton_Delete_clicked()
 {
-    FolderHistoryList.removeAll(ui->listWidget_Favourites->item(iHistoryIndex)->text());
-    ui->listWidget_Favourites->removeItemWidget(ui->listWidget_Favourites->item(iHistoryIndex));
+    QString folderName = ui->listWidget_Favourites->item(iHistoryIndex)->text();
+    qDebug() << "item - " << folderName;
+    FolderHistoryList.removeAll(folderName);
 
-    QSettings save(QApplication::applicationDirPath().append("/").append("history.ina"), QSettings::IniFormat);
-    save.beginGroup("General");
-    save.setValue("DirectoryHistory", QVariant::fromValue(FolderHistoryList));
-    save.endGroup();
+    QSettings save(QApplication::applicationDirPath().append("/").append("history.ina"), InaFormat);
+    save.beginWriteArray("DirectoryHistory");
+    for (int i = 0; i < FolderHistoryList.size(); ++i) {
+        save.setArrayIndex(i);
+        save.setValue("HistoryFolder", FolderHistoryList.at(i));
+    }
+    save.endArray();
+    save.sync();
+    ui->listWidget_Favourites->clear();
+
+    foreach (QString folder, FolderHistoryList)
+    {
+        QListWidgetItem *itm = new QListWidgetItem();
+        itm->setText(folder);
+        ui->listWidget_Favourites->insertItem(0, itm);
+    }
 }
 
 void MainWindow::on_listWidget_Favourites_doubleClicked(const QModelIndex &index)
 {
-    QDesktopServices::openUrl(ui->listWidget_Favourites->item(index.row())->text());
+    QString folderFromHistory = ui->listWidget_Favourites->item(index.row())->text();
+    QStringList folderSubDirectories;
+    QDirIterator subDirectoriesIterator(folderFromHistory, QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator ::NoIteratorFlags);
+
+    while(subDirectoriesIterator.hasNext()){
+        subDirectoriesIterator.next();
+        folderSubDirectories << subDirectoriesIterator.filePath();
+    }
+    QString openFolderURL = folderSubDirectories.at(rand()%((folderSubDirectories.count()-1) + 1));
+    QDesktopServices::openUrl(openFolderURL);
 }
 
 void MainWindow::on_listWidget_Favourites_clicked(const QModelIndex &index)

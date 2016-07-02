@@ -7,6 +7,7 @@
 #include <QDesktopServices>
 #include <QDirIterator>
 #include <QDebug>
+#include <QMetaType>
 
 #define InaFormat QSettings::IniFormat
 
