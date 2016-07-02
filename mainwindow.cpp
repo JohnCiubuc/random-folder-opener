@@ -47,7 +47,7 @@ void MainWindow::on_pushButton_Browse_clicked()
                    folderSubDirectories << subDirectoriesIterator.filePath();
                }
                QString openFolderURL = folderSubDirectories.at(rand()%((folderSubDirectories.count()-1) + 1));
-               QDesktopServices::openUrl(openFolderURL);
+               QDesktopServices::openUrl(QUrl::fromLocalFile(openFolderURL));
 
 //               if(!FolderHistoryList.contains(openFolderURL))
 //                    FolderHistoryList.append(openFolderURL);
@@ -113,7 +113,7 @@ void MainWindow::on_listWidget_Favourites_doubleClicked(const QModelIndex &index
         folderSubDirectories << subDirectoriesIterator.filePath();
     }
     QString openFolderURL = folderSubDirectories.at(rand()%((folderSubDirectories.count()-1) + 1));
-    QDesktopServices::openUrl(openFolderURL);
+    QDesktopServices::openUrl(QUrl::fromLocalFile(openFolderURL));
 }
 
 void MainWindow::on_listWidget_Favourites_clicked(const QModelIndex &index)
