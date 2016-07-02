@@ -12,8 +12,11 @@ TARGET = random-folder-opener
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    mainwindow.cpp
 
-HEADERS  +=
+HEADERS  += \
+    mainwindow.h
 
-FORMS    +=
+FORMS    += \
+    mainwindow.ui
