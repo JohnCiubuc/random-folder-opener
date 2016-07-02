@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QDirIterator>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
                    subDirectoriesIterator.next();
                    folderSubDirectories << subDirectoriesIterator.filePath();
                }
-               QString openFolderURL = folderSubDirectories.at(rand() % folderSubDirectories.count() + 1);
+               QString openFolderURL = folderSubDirectories.at(rand()%((folderSubDirectories.count()-1) + 1));
                QDesktopServices::openUrl(openFolderURL);
            }
        }
