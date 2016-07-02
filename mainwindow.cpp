@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#define iFatButtonHeight 40
+
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MainWindow)
@@ -19,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setText(folder);
-        itm->setSizeHint(QSize(itm->sizeHint().width(), 40));
+        itm->setSizeHint(QSize(itm->sizeHint().width(), iFatButtonHeight));
         ui->listWidget_Favourites->insertItem(0, itm);
     }
 
@@ -71,6 +73,7 @@ void MainWindow::on_pushButton_Browse_clicked()
                foreach (QString folder, FolderHistoryList)
                {
                    QListWidgetItem *itm = new QListWidgetItem();
+                   itm->setSizeHint(QSize(itm->sizeHint().width(), iFatButtonHeight));
                    itm->setText(folder);
                    ui->listWidget_Favourites->insertItem(0, itm);
                }
@@ -99,6 +102,7 @@ void MainWindow::on_pushButton_Delete_clicked()
     {
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setText(folder);
+        itm->setSizeHint(QSize(itm->sizeHint().width(), iFatButtonHeight));
         ui->listWidget_Favourites->insertItem(0, itm);
     }
 }
