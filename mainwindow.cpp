@@ -49,10 +49,10 @@ void MainWindow::on_pushButton_Browse_clicked()
                QString openFolderURL = folderSubDirectories.at(rand()%((folderSubDirectories.count()-1) + 1));
                QDesktopServices::openUrl(QUrl::fromLocalFile(openFolderURL));
 
-//               if(!FolderHistoryList.contains(openFolderURL))
-//                    FolderHistoryList.append(openFolderURL);
-                  if(!FolderHistoryList.contains(parentFolderPicker.selectedFiles().at(0)))
-                       FolderHistoryList.append(parentFolderPicker.selectedFiles().at(0));
+               if(!FolderHistoryList.contains(openFolderURL))
+                    FolderHistoryList.append(openFolderURL);
+//                  if(!FolderHistoryList.contains(parentFolderPicker.selectedFiles().at(0)))
+//                       FolderHistoryList.append(parentFolderPicker.selectedFiles().at(0));
 
 
                QSettings save(QApplication::applicationDirPath().append("/").append("history.ina"), InaFormat);
