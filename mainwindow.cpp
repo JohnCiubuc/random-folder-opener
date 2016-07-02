@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setText(folder);
+        itm->setSizeHint(QSize(itm->sizeHint().width(), 40));
         ui->listWidget_Favourites->insertItem(0, itm);
     }
 

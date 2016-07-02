@@ -39,6 +39,7 @@ private:
     Ui::MainWindow *ui;
     QList<QString> FolderHistoryList;
     int iHistoryIndex;
+
 };
 
 #endif // MAINWINDOW_H
